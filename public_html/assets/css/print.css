@@ -1,0 +1,48 @@
+@CHARSET "UTF-8";
+
+@media print {
+
+    /* カンバスのサイズ調整 */
+    /*canvas {
+        width:170mm !important;
+        height: auto !important;
+    }*/
+    body {
+        color: #000 !important;
+    }
+    main {
+        padding: 0 !important;
+        height: auto !important;
+        max-height: none !important;
+        background-color: #fff !important;
+    }
+
+    main .content article {
+        padding: 0;
+    }
+
+    #menu {
+        display: none;
+    }
+
+    header {
+        display: none;
+    }
+    header div {
+        display: none;
+    }
+    footer {
+        display: none;
+    }
+
+    /* bootstrap */
+
+    /* aタグのURL非表示 */
+    a[href]:after {
+        content: "" !important;
+    }
+    abbr[title]:after {
+        content: "" !important;
+    }
+    /* Bootstrapが印刷時に文字を強制的に黒にするので色が必要な部分はstyle="color: xxx !important"で回避する */
+}

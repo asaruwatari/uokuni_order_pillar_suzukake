@@ -1,0 +1,47 @@
+@CHARSET "UTF-8";
+
+/* マニュアル */
+
+body#manual h1 {
+    margin: 0;
+    font-size: 1.5em;
+    line-height: 40px;
+    padding: 0 10px;
+}
+
+header .menu {
+    margin-left: 0;
+}
+
+main {
+    margin-top: 40px;
+    margin-left: 0;
+}
+
+main {
+    background-color: #fff;
+    line-height: 1.8em;
+}
+.manual h3 {
+    background-color: #f4f4f4;
+    border-left: 12px solid #25ADEA;
+    font-size: 20px;
+    font-weight: 400;
+    margin: 2em 0 0.5em;
+    padding: 20px;
+}
+.manual h4 {
+    border-bottom:5px solid #f4f4f4;
+    font-size:150%;
+    margin:2em 0 0.5em;
+    padding-bottom:0.5em;
+}
+.manual h5 {
+    background-color: #999;
+    border-radius: 22px;
+    color: #fff;
+    font-size: 18px;
+    line-height: 160%;
+    margin: 20px 0;
+    padding: 5px 25px;
+}

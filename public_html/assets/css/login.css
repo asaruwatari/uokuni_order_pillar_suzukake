@@ -1,0 +1,18 @@
+/* ログイン画面 */
+body {
+    background-color:#fff;
+}
+#login main {
+    margin: 60px auto;
+    padding: 3em;
+    width: 500px;
+    height: 500px;
+    border-radius: 10px;
+    background-color: #FFF;
+}
+#login img.logo {
+    margin: 60px auto;
+}
+#login h1 {
+    padding-bottom: 1em;
+}

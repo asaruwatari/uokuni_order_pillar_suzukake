@@ -1,0 +1,179 @@
+@CHARSET "UTF-8";
+
+/* 共通 */
+
+/* ラベルのポインタを指に */
+label {
+    cursor: pointer;
+}
+
+/* ラジオとチェックボックスを大きく */
+input[type=radio],
+input[type=checkbox] {
+    -ms-transform: scale(1.2, 1.2);
+    -webkit-transform: scale(1.2, 1.2);
+    -webkit-transform-origin:left center;
+    transform: scale(1.2, 1.2);
+    transform-origin:left center;
+    margin-right: 4px;
+}
+input {
+    z-index: 1;
+}
+
+/* アンカー無効をグレー */
+a.disabled {
+    color: #eee;
+}
+option:disabled {
+    color: #ccc;
+}
+
+/* Bootboxやダイアログを上下中央 */
+/*.modal-dialog {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100%;
+    margin: auto;
+    pointer-events: none;
+}
+.modal-dialog .modal-content {
+    pointer-events: all;
+}*/
+
+/* body */
+body {
+    background-color:#fff !important;
+    overflow-y: auto !important;
+}
+
+/* ヘッダー */
+header {
+    position: fixed;
+    width: 100%;
+    height: 50px;
+    border-bottom: #eee 2px solid;
+    background: #fff;
+    justify-content: space-between;
+    z-index: 100;
+}
+/*
+* ハンバーガー
+*/
+header #hamburger {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    top: 5px;
+    right: 5px;
+    cursor: pointer;
+    color: #000;
+    font-size: 40px;
+}
+
+/*
+* スライドメニュー
+*/
+#menu {
+    background-color: #f8f8f8;
+}
+#menu ul {
+    list-style-type: none;
+    color: #333;
+    background-color: #ccc;
+}
+#menu ul li {
+    font-size: 1.25em;
+    line-height: 2em;
+    border-bottom: 1px solid #333;
+}
+#menu ul li a {
+    display: block;
+    line-height: 2em;
+    text-decoration: none;
+}
+
+/* メイン */
+main {
+    padding-top: 60px;
+}
+
+/* フッター */
+footer {
+    margin-top: 10px;
+    padding: 0.8em;
+    background: #fff none repeat scroll 0 0;
+    border-top: 1px solid #eee;
+    color: #444;
+}
+
+/* テーブル */
+main table thead th {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 49px;
+    z-index: 2;
+}
+
+.table {
+    background: #fff;
+}
+.table > thead > tr > th,
+.table > tbody > tr > th {
+    font-weight: bold;
+    background: #E8E8E8;
+    white-space: nowrap;
+}
+/* チェックボックス付きテーブル */
+table.selectable tr.checked {
+    background-color: #ffd;
+}
+/* 選択可能テーブル */
+table.selectable tr {
+    cursor: pointer;
+}
+
+/* ページャー */
+.pagination {
+    margin: 0 0 1em 0 !important;
+}
+.pager-box {
+    clear: both;
+    width: 100%;
+    overflow: hidden;
+}
+.pager-box .info {
+    float: left;
+    margin-bottom: 1em;
+    margin-right: 0.5em;
+    padding: 6px 12px;
+    line-height: 1.5em;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    color: #888;
+}
+
+/* 上に戻る */
+#totop {
+    position: fixed;
+    bottom: 5px;
+    right: 5px;
+    font-size: 20px;
+}
+#totop a {
+    display: block;
+    padding: 5px;
+    width: 40px;
+    color: #fff;
+    background: #666;
+    text-decoration: none;
+    text-align: center;
+    border-radius: 2px;
+    opacity: 0.5;
+}
+#totop a:hover {
+    text-decoration: none;
+    background: #999;
+}

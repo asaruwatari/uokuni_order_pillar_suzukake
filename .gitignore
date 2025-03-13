@@ -1,0 +1,27 @@
+# Application
+
+# CodeIgniter
+/tmp/cache/*
+/tmp/logs/*
+/tmp/sessions/*
+/user_guide
+
+# IDE
+/nbproject
+.idea/*
+
+# Composer
+#composer.lock
+/vendor/*
+
+# Windows
+Thumbs.db
+
+# Mac
+.DS_Store
+
+# .htaccess
+!.htaccess
+
+# Git
+!.gitkeep

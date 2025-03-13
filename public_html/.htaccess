@@ -1,0 +1,27 @@
+SetEnv CI_ENV development
+
+## Security settings
+# SameSite none
+Header edit Set-Cookie (.*) "$1; secure; SameSite=none"
+# XSS Defense
+Header set X-XSS-Protection "1; mode=block"
+# Content sniffing Defense
+Header set X-Content-Type-Options nosniff
+# Click-jacking Defense
+Header append X-Frame-Options SAMEORIGIN
+# man-in-the-middle attack Defense
+Header set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+
+## Rewrite settings
+RewriteEngine On
+RewriteBase /
+# TRACE Off
+RewriteCond %{REQUEST_METHOD} ^(TRACE|TRACK|OPTIONS)
+RewriteRule ^(.*)$ - [F]
+# SSL
+RewriteCond %{HTTPS} !on
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+# Boot
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ index.php?$1 [QSA,L]

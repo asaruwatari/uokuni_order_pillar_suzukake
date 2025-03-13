@@ -1,0 +1,28 @@
+魚国総本社
+ピラー株式会社 新三田工場 すずかけ寮 食事予約
+https://yoyakurshoku.com/pillar-suzukake/
+
+----------------------------------------------------------------------
+■動作環境
+PHP 7.2
+CodeIgniter 3.1.11 (PHP5.3.7以上 推奨PHP5.6以上)
+MySQL 5.7
+PHPExcel 1.8.1 for PHP7.4
+https://github.com/mbdmt/phpexcel_for_php74
+
+必須PHPモジュール
+ mysqli
+ pdo
+ mbstring
+
+PHP7.2+下層+Safari対応のため
+core/MY_Security設置
+
+Cookie Pathの最後に/がないとSafariでCookieが無効になる
+元のSecurityのPHP7.2以下の処理はSameSiteを追加するため
+headerで処理しておりPathがURLエンコードされ正常に動かない
+
+----------------------------------------------------------------------
+■更新履歴
+----------------------------------------------------------------------
+2025/3 開発
