@@ -1,11 +1,11 @@
 
 <div class="card mb-2">
     <div class="card-body text-center p-2">
-        <a href="<?= h($dir.$class.'/'.$method.$prev) ?>" class="btn btn-primary btn-sm"><i class="fa fa-chevron-left fa-fw" aria-hidden="true"></i> 前月度</a>
+        <a href="<?= h($dir . $class . '/' . $method . $prev) ?>" class="btn btn-primary btn-sm"><i class="fa fa-chevron-left fa-fw" aria-hidden="true"></i> 前月度</a>
         <span>　　<?= h($year) ?>年<?= h($month) ?>月度（<?= jp_date($from_date) ?>
             ～
             <?= jp_date($to_date) ?>）　　</span>
-        <a href="<?= h($dir.$class.'/'.$method.$next) ?>" class="btn btn-primary btn-sm">次月度 <i class="fa fa-chevron-right fa-fw" aria-hidden="true"></i></a>
+        <a href="<?= h($dir . $class . '/' . $method . $next) ?>" class="btn btn-primary btn-sm">次月度 <i class="fa fa-chevron-right fa-fw" aria-hidden="true"></i></a>
     </div>
 </div>
 
@@ -17,7 +17,13 @@
 
 <div class="alert alert-warning">
     無効な利用者は除外するため、利用者を無効にする際は締め処理以降に行ってください。<br>
-    金額は現在のシステム設定の食単価(<?= number_format($system['price']) ?> 円)で計算されます。
+    <?php
+    if ($system['price']) {
+        ?>
+        金額は現在のシステム設定の食単価(<?= number_format($system['price']) ?> 円)で計算されます。
+        <?php
+    }
+    ?>
 </div>
 
 <!-- 一覧 -->
@@ -32,8 +38,15 @@
                     <th>職番</th>
                     <th>氏名</th>
                     <th>区分</th>
-                    <th>食数</th>
-                    <th>金額</th>
+                    <?php
+                    // 献立区ごとの項目名
+                    foreach ($item_types as $item_type) {
+                        ?>
+                        <th><?= h($item_type['item_time.name']) ?><br>
+                            <?= h($item_type['name']) ?></th>
+                        <?php
+                    }
+                    ?>
                 </tr>
             </thead>
             <?php
@@ -43,8 +56,14 @@
             <td><?= h($data['user.code']) ?></td>
             <td><?= h($data["user.name"]) ?></td>
             <td><?= h($data['user_type.name']) ?></td>
-            <td class="text-right"><?= number_format($data['qty']) ?> 食</td>
-            <td class="text-right"><?= number_format($data['qty'] * $system['price']) ?> 円</td>
+            <?php
+            // 献立区ごとの食数
+            foreach ($item_types as $item_type) {
+                ?>
+                <td class="text-right"><?= number_format($data['qty_' . $item_type['id']]) ?> 食</td>
+                <?php
+            }
+            ?>
         </tr>
         <?php
     }
@@ -54,8 +73,14 @@
             <th></th>
             <th></th>
             <th class="text-right">合計</th>
-            <td class="text-right"><?= number_format(array_sum(array_column($list, 'qty'))) ?> 食</td>
-            <td class="text-right"><?= number_format(array_sum(array_column($list, 'qty')) * $system['price']) ?> 円</td>
+            <?php
+            // 献立区ごとの食数合計
+            foreach ($item_types as $item_type) {
+                ?>
+                <td class="text-right"><?= number_format(array_sum(array_column($list, 'qty_' . $item_type['id']))) ?> 食</td>
+                <?php
+            }
+            ?>
         </tr>
     </thead>
 </table>

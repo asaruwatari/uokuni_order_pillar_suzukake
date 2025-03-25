@@ -47,15 +47,15 @@ class Order extends Admin_controller
 
         // 前月・次月リンク用パラメータ
         $day = 7;
-        $this->load->vars('prev', '/?date='.date('Y-m-d', strtotime("$date -{$day} day")));
-        $this->load->vars('next', '/?date='.date('Y-m-d', strtotime("$date +{$day} day")));
+        $this->load->vars('prev', '/?date=' . date('Y-m-d', strtotime("$date -{$day} day")));
+        $this->load->vars('next', '/?date=' . date('Y-m-d', strtotime("$date +{$day} day")));
 
         // メニュー枠情報取得
-        $this->load->model($this->router->directory.'Item_type_model');
+        $this->load->model($this->router->directory . 'Item_type_model');
         $this->load->vars('item_types', $this->Item_type_model->get_list_data());
 
         // 注文情報取得
-        $this->load->model($this->router->directory.'Order_model');
+        $this->load->model($this->router->directory . 'Order_model');
         $this->load->vars('datas', $this->Order_model->list_by_date($date, $day));
     }
 
@@ -79,7 +79,7 @@ class Order extends Admin_controller
         }
 
         // 日の注文情報取得
-        $this->load->model($this->router->directory.'Order_model');
+        $this->load->model($this->router->directory . 'Order_model');
         $this->load->vars('list', $this->Order_model->gets_by_date($date));
     }
 
@@ -105,7 +105,7 @@ class Order extends Admin_controller
         $this->load->vars('date', $date);
 
         // 日の注文情報取得
-        $this->load->model($this->router->directory.'Order_model');
+        $this->load->model($this->router->directory . 'Order_model');
         $this->load->vars('list', $this->Order_model->gets_by_date($date));
 
         // ファイル名
@@ -132,7 +132,7 @@ class Order extends Admin_controller
         $this->load->vars('date', $date);
 
         // 日の注文情報取得
-        $this->load->model($this->router->directory.'Order_model');
+        $this->load->model($this->router->directory . 'Order_model');
         $this->load->vars('list', $this->Order_model->gets_by_date($date));
 
         // ファイル名
@@ -153,7 +153,7 @@ class Order extends Admin_controller
         $this->set_back_url();
 
         // 利用者選択肢
-        $this->load->model($this->router->directory.'User_model');
+        $this->load->model($this->router->directory . 'User_model');
         $this->load->vars('user_options', $this->User_model->get_options());
 
         // 編集画面処理
@@ -168,7 +168,7 @@ class Order extends Admin_controller
     protected function edit_hook_before_assign(&$data, &$validation_rules)
     {
         // 商品択肢
-        $this->load->model($this->router->directory.'Item_model');
+        $this->load->model($this->router->directory . 'Item_model');
         $this->load->vars('item_options', $this->Item_model->get_date_options($data['item_id']));
     }
 
@@ -213,24 +213,46 @@ class Order extends Admin_controller
         $this->set_back_url();
 
         // 締め日から基準日決定
-        if (MONTH_START_DAY <= date('n')) {
-            // 今月度 3/21なら3月度
-            $base_time = strtotime(date('Y-m-01'));
+        if (MONTH_START_DAY == 0) {
+            // 0なら末締め
+            // 基準日は今日の前月
+            $base_time = strtotime(date('Y-m-01') . " -1 month");
+
+            // 基準年月 引数なければ基準日の年と月
+            $year  = $this->input->get('year') ?: date('Y', $base_time);
+            $month = $this->input->get('month') ?: date('n', $base_time);
+
+            // 期間 基準日の月の1日
+            $from_date = date('Y-m-01', strtotime("{$year}-{$month}-01"));
+            // 期間 基準日の月末
+            $to_date   = date('Y-m-t', strtotime("{$year}-{$month}-01"));
         } else {
-            // 先月度 3/20なら先月度
-            $base_time = strtotime(date('Y-m-01')." -1 month");
+            // 0以外なら指定日締め
+            if (MONTH_START_DAY <= date('n')) {
+                // 締め日を超えているなら
+                // 基準日は今日の月
+                $base_time = strtotime(date('Y-m-01'));
+            } else {
+                // 締め日を超えていないなら
+                // 基準日は今日の前月
+                $base_time = strtotime(date('Y-m-01') . " -1 month");
+            }
+
+            // 基準年月 引数なければ基準日の年と月
+            $year  = $this->input->get('year') ?: date('Y', $base_time);
+            $month = $this->input->get('month') ?: date('n', $base_time);
+
+            // 期間
+            // 期間 基準日の月の締め日+1日
+            $from_date = date(strtotime('Y-m-' . MONTH_START_DAY . ' +1 day'), strtotime("{$year}-{$month}-01"));
+            // 期間 基準日の翌月の締め日
+            $to_date   = date('Y-m-' . MONTH_START_DAY, strtotime("{$year}-{$month}-01 +1 month"));
         }
 
-        // 引数なければ今月の年と月
-        $year  = $this->input->get('year') ?: date('Y', $base_time);
-        $month = $this->input->get('month') ?: date('n', $base_time);
         $this->load->vars('year', $year);
         $this->load->vars('month', $month);
         $this->load->vars('weeks', ['日', '月', '火', '水', '木', '金', '土']);
 
-        // 期間
-        $from_date = date('Y-m-21', strtotime("{$year}-{$month}-01"));
-        $to_date   = date('Y-m-20', strtotime("{$year}-{$month}-01 +1 month"));
         $this->load->vars('from_date', $from_date);
         $this->load->vars('to_date', $to_date);
 
@@ -239,15 +261,15 @@ class Order extends Admin_controller
         $this->load->vars('next', vsprintf('/?year=%s&month=%s', explode('-', date('Y-m', strtotime("{$year}-{$month}-01 +1 month")))));
 
         // メニュー枠情報取得
-        $this->load->model($this->router->directory.'Item_type_model');
+        $this->load->model($this->router->directory . 'Item_type_model');
         $this->load->vars('item_types', $this->Item_type_model->get_list_data());
 
         // 注文情報取得
-        $this->load->model($this->router->directory.'Order_model');
+        $this->load->model($this->router->directory . 'Order_model');
         $this->load->vars('list', $this->Order_model->get_total($from_date, $to_date));
 
         // システム設定
-        $this->load->model($this->router->directory.'System_model');
+        $this->load->model($this->router->directory . 'System_model');
         $this->load->vars('system', $this->System_model->get_by_id(1));
     }
 
@@ -272,13 +294,27 @@ class Order extends Admin_controller
         if (!$year || !$month) {
             exit;
         }
+
+        // 締め日から基準日決定
+        if (MONTH_START_DAY == 0) {
+            // 0なら末締め
+            // 期間 基準日の月の1日
+            $from_date = date('Y-m-01', strtotime("{$year}-{$month}-01"));
+            // 期間 基準日の月末
+            $to_date   = date('Y-m-t', strtotime("{$year}-{$month}-01"));
+        } else {
+            // 0以外なら指定日締め
+            // 期間
+            // 期間 基準日の月の締め日+1日
+            $from_date = date(strtotime('Y-m-' . MONTH_START_DAY . ' +1 day'), strtotime("{$year}-{$month}-01"));
+            // 期間 基準日の翌月の締め日
+            $to_date   = date('Y-m-' . MONTH_START_DAY, strtotime("{$year}-{$month}-01 +1 month"));
+        }
+
         $this->load->vars('year', $year);
         $this->load->vars('month', $month);
         $this->load->vars('weeks', ['日', '月', '火', '水', '木', '金', '土']);
 
-        // 期間
-        $from_date = date('Y-m-21', strtotime("{$year}-{$month}-01"));
-        $to_date   = date('Y-m-20', strtotime("{$year}-{$month}-01 +1 month"));
         $this->load->vars('from_date', $from_date);
         $this->load->vars('to_date', $to_date);
 
@@ -286,16 +322,19 @@ class Order extends Admin_controller
         $this->load->vars('prev', vsprintf('/?year=%s&month=%s', explode('-', date('Y-m', strtotime("{$year}-{$month}-01 -1 month")))));
         $this->load->vars('next', vsprintf('/?year=%s&month=%s', explode('-', date('Y-m', strtotime("{$year}-{$month}-01 +1 month")))));
 
+        // メニュー枠情報取得
+        $this->load->model($this->router->directory . 'Item_type_model');
+        $this->load->vars('item_types', $this->Item_type_model->get_list_data());
+
         // 注文情報取得
-        $this->load->model($this->router->directory.'Order_model');
+        $this->load->model($this->router->directory . 'Order_model');
         $this->load->vars('list', $this->Order_model->get_total($from_date, $to_date));
 
         // システム設定
-        $this->load->model($this->router->directory.'System_model');
+        $this->load->model($this->router->directory . 'System_model');
         $this->load->vars('system', $this->System_model->get_by_id(1));
 
         // ファイル名
         $this->load->vars('filename', "total_sheet_{$year}-{$month}.xlsx");
     }
-
 }

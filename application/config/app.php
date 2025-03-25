@@ -19,7 +19,7 @@ $config['salt'] = 'qfmcyohkvmsrp6bsv3gdkjzntm0jgj1p';
  *  定数設定
  */
 // 月締め開始日
-define('MONTH_START_DAY', 21);
+define('MONTH_START_DAY', 0);
 // 注文表示最大日
 define('ORDER_VIEW_MAX_DAY', 7 * 2); // 2週間
 define('ORDER_VIEW_LAST_DAY', 7 * 15); // 15週間

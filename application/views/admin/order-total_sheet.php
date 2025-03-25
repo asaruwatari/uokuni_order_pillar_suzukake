@@ -17,14 +17,18 @@ $x = 0;
 $y = 1;
 
 // タイトル行
-$sheet->setCellValueByColumnAndRow($x, $y++, "{$year}年{$month}月度（{$from_date}～{$to_date}） 受注集計　[出力日時 ".date('Y-m-d H:i:s').']');
+$sheet->setCellValueByColumnAndRow($x, $y++, "{$year}年{$month}月度（{$from_date}～{$to_date}） 受注集計　[出力日時 " . date('Y-m-d H:i:s') . ']');
 
 // ヘッダ行
 $sheet->setCellValueByColumnAndRow($x++, $y, '職番');
 $sheet->setCellValueByColumnAndRow($x++, $y, '氏名');
 $sheet->setCellValueByColumnAndRow($x++, $y, '区分');
-$sheet->setCellValueByColumnAndRow($x++, $y, '食数');
-$sheet->setCellValueByColumnAndRow($x++, $y++, '金額');
+
+// 献立区ごとの項目名
+foreach ($item_types as $item_type) {
+    $sheet->setCellValueByColumnAndRow($x++, $y, $item_type['item_time.name'] . " " . $item_type['name']);
+}
+$y++;
 
 // 集計行
 foreach ($list as $i => &$data) {
@@ -32,15 +36,22 @@ foreach ($list as $i => &$data) {
     $sheet->setCellValueExplicitByColumnAndRow($x++, $y, $data['user.code'], PHPExcel_Cell_DataType::TYPE_STRING);
     $sheet->setCellValueExplicitByColumnAndRow($x++, $y, $data['user.name'], PHPExcel_Cell_DataType::TYPE_STRING);
     $sheet->setCellValueExplicitByColumnAndRow($x++, $y, $data['user_type.name'], PHPExcel_Cell_DataType::TYPE_STRING);
-    $sheet->setCellValueExplicitByColumnAndRow($x++, $y, $data['qty'], PHPExcel_Cell_DataType::TYPE_NUMERIC);
-    $sheet->setCellValueExplicitByColumnAndRow($x++, $y++, $data['qty'] * $system['price'], PHPExcel_Cell_DataType::TYPE_NUMERIC);
+    // 献立区ごとの食数
+    foreach ($item_types as $item_type) {
+        $sheet->setCellValueExplicitByColumnAndRow($x++, $y, $data['qty_' . $item_type['id']], PHPExcel_Cell_DataType::TYPE_NUMERIC);
+    }
+    $y++;
 }
+
 $x = 0;
 $sheet->setCellValueExplicitByColumnAndRow($x++, $y, '', PHPExcel_Cell_DataType::TYPE_STRING);
 $sheet->setCellValueExplicitByColumnAndRow($x++, $y, '', PHPExcel_Cell_DataType::TYPE_STRING);
 $sheet->setCellValueExplicitByColumnAndRow($x++, $y, '合計', PHPExcel_Cell_DataType::TYPE_STRING);
-$sheet->setCellValueExplicitByColumnAndRow($x++, $y, array_sum(array_column($list, 'qty')), PHPExcel_Cell_DataType::TYPE_NUMERIC);
-$sheet->setCellValueExplicitByColumnAndRow($x++, $y++, array_sum(array_column($list, 'qty')) * $system['price'], PHPExcel_Cell_DataType::TYPE_NUMERIC);
+// 献立区ごとの食数
+foreach ($item_types as $item_type) {
+    $sheet->setCellValueExplicitByColumnAndRow($x++, $y, array_sum(array_column($list, 'qty_' . $item_type['id'])), PHPExcel_Cell_DataType::TYPE_NUMERIC);
+}
+$y++;
 
 // 幅調整
 for ($col = 0; $col < PHPExcel_Cell::columnIndexFromString($sheet->getHighestDataColumn()); $col++) {
