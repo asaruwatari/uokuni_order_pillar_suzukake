@@ -7,7 +7,13 @@
 <div class="card mb-2">
     <div class="card-body p-2">
         <a href="<?= h("{$dir}{$class}/date_sheet/?date={$get['date']}") ?>" class="btn btn-primary btn-sm text-nowrap"><i class="fas fa-file-excel fa-fw"></i> Excel出力</a>
-        <a href="<?= h("{$dir}{$class}/date_check_sheet/?date={$get['date']}") ?>" class="btn btn-primary btn-sm text-nowrap" target="_blank"><i class="fas fa-file-pdf fa-fw"></i> 受取チェック表出力</a>
+        <?php
+        if (true == ORDER_DATE_CHECK_SHEET) {
+            ?>
+            <a href="<?= h("{$dir}{$class}/date_check_sheet/?date={$get['date']}") ?>" class="btn btn-primary btn-sm text-nowrap" target="_blank"><i class="fas fa-file-pdf fa-fw"></i> 受取チェック表出力</a>
+            <?php
+        }
+        ?>
     </div>
 </div>
 
@@ -63,4 +69,4 @@
     ?>
 </table>
 
-<?php $this->load->view($dir.'elements/back') ?>
+<?php $this->load->view($dir . 'elements/back') ?>

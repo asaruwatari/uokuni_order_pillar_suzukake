@@ -55,3 +55,6 @@ define('ADMIN_MENU_PASSWORD', 33);
 
 define('ADMIN_MENU_SYSTEM', 98);
 define('ADMIN_MENU_SYSTEM_INFO', 99);
+
+// 受付チェック表
+define('ORDER_DATE_CHECK_SHEET', false);

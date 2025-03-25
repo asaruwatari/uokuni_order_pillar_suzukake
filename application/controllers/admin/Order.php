@@ -119,6 +119,11 @@ class Order extends Admin_controller
      */
     public function date_check_sheet()
     {
+        // 受取チェック表が無効なら前画面へ
+        if (false == ORDER_DATE_CHECK_SHEET) {
+            redirect($this->get_back_url());
+        }
+
         $this->layout = 'pdf';
 
         // タイトル
